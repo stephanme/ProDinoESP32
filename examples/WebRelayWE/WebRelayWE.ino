@@ -35,6 +35,7 @@ IPAddress _ip(192, 168, 1, 197);
 const uint16_t LOCAL_PORT = 80;
 // Initialize the Ethernet server library.
 #ifdef ETH_TEST
+#define ETH_HOST_NAME "myprodino"
 EthernetServer _ethServer(LOCAL_PORT);
 #endif // ETH_TEST
 #ifdef WIFI_TEST
@@ -91,7 +92,7 @@ void setup(void)
 	//Ethernet.begin(_mac, _ip);
 	// Getting IP from DHCP
 	esp_read_mac(_mac, ESP_MAC_ETH);
-	if (Ethernet.begin(_mac) == 0) {
+	if (Ethernet.begin(_mac, ETH_HOST_NAME) == 0) {
 		Serial.println("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
 		while (1);
@@ -99,6 +100,8 @@ void setup(void)
 	_ethServer.begin();
 
 	Serial.println();
+	Serial.print("Hostname: ");
+	Serial.println(Ethernet.hostname());
 	Serial.print("Ethernet IP: ");
 	Serial.print(Ethernet.localIP());
 	Serial.print(":");

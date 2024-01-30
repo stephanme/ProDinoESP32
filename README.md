@@ -6,6 +6,7 @@ Forked from https://github.com/kmpelectronics/ProDinoESP32
 
 ## Changes
 - [WebRelayWE.ino](./examples/WebRelayWE/WebRelayWE.ino) - optional WIFI support (#define WIFI_TEST)
+- support to set hostname for Ethernet when using DHCP
 
 
 ## How to install our library

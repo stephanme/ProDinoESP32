@@ -67,3 +67,4 @@ examples/Inputs1/__vm/Compile.vmps.xml
 examples/Inputs1/__vm/.Inputs1.vsarduino.h
 examples/Inputs1/.vs/Inputs1/v16/ipch/AutoPCH/efaf8abf6e3658e3/.INPUTS1.VSARDUINO.ipch
 examples/Inputs1/.vs/Inputs1/v16/Browse.VC.db
+.DS_Store
