@@ -24,8 +24,9 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 
-// if this define is uncommented example supports both Ethernet and WiFi
+// define if Ethernet and/or WiFi support should be enabled
 #define ETH_TEST
+#define WIFI_TEST
 
 byte _mac[] = { 0x00, 0x08, 0xDC, 0x11, 0x27, 0x8C }; 
 // The IP address will be dependent on your local network.
@@ -33,8 +34,12 @@ IPAddress _ip(192, 168, 1, 197);
 // Local port. The port 80 is default for HTTP
 const uint16_t LOCAL_PORT = 80;
 // Initialize the Ethernet server library.
+#ifdef ETH_TEST
 EthernetServer _ethServer(LOCAL_PORT);
+#endif // ETH_TEST
+#ifdef WIFI_TEST
 WiFiServer _wifiServer(LOCAL_PORT);
+#endif // WIFI_TEST
 
 /**
  * @brief Setup void. Ii is Arduino executed first. Initialize DiNo board.
@@ -61,6 +66,7 @@ void setup(void)
 	KMPProDinoESP32.setStatusLed(blue);
 
 	// Connect to WiFi network
+#ifdef WIFI_TEST
 	WiFi.begin(SSID, SSID_PASSWORD);
 	Serial.print("\n\r \n\rWiFi is connecting");
 
@@ -77,12 +83,14 @@ void setup(void)
 	Serial.println(LOCAL_PORT);
 
 	_wifiServer.begin();
+#endif // WIFI_TEST	
 
 #ifdef ETH_TEST
 	// Start the Ethernet connection and the server.
 	// Using static IP address
 	//Ethernet.begin(_mac, _ip);
 	// Getting IP from DHCP
+	esp_read_mac(_mac, ESP_MAC_ETH);
 	if (Ethernet.begin(_mac) == 0) {
 		Serial.println("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
@@ -114,6 +122,7 @@ void loop()
 
 	Client* client = NULL;
 	// Check if a client has connected
+#ifdef WIFI_TEST
 	WiFiClient wifiClient = _wifiServer.available();
 	if (wifiClient)
 	{
@@ -127,6 +136,7 @@ void loop()
 
 		client = &wifiClient;
 	}
+#endif
 #ifdef ETH_TEST
 	EthernetClient ethClient = _ethServer.available();
 	if (ethClient && ethClient.connected())
